@@ -55,7 +55,7 @@ function adaptarPokemon(data) {
 const nombres = ["bulbasaur", "charmander", "squirtle", "pikachu", "jigglypuff", "gengar"];
 let pokedex = [];   // aquí guardamos la rejilla cargada
 
-// un fetch por cada nombre → un array de promesas
+// un fetch por  de promesas
 const promesas = nombres.map(function (nombre) {
   return fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`).then(r => r.json());
 });
@@ -68,3 +68,8 @@ Promise.all(promesas)
   .catch(function () {
     contenedor.innerHTML = `<p class="col-span-full text-center text-red-600">No se pudo cargar la Pokédex.</p>`;
   });
+
+  //hhhhh
+  
+
+  
