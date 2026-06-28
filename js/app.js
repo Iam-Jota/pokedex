@@ -14,7 +14,7 @@ function crearTarjeta(pokemon) {
   .map(function (tipo) {
     return `<span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded-full">${tipo}</span>`;
   })
-  .join("");   // une el array de strings en uno solo
+  .join("");   // une el array de stringso
   articulo.className = "bg-white rounded-xl shadow p-4 text-center";
   articulo.innerHTML = `
     <img src="${imagen}" alt="${nombre}" class="w-24 h-24 mx-auto">
