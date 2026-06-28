@@ -1,4 +1,4 @@
-const pokemonLocal = [
+/*const pokemonLocal = [
 
   { nombre: "bulbasaur",  imagen: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",  tipos: ["grass", "poison"] },
   { nombre: "charmander", imagen: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",  tipos: ["fire"] },
@@ -7,7 +7,7 @@ const pokemonLocal = [
   { nombre: "jigglypuff", imagen: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png", tipos: ["normal", "fairy"] },
   { nombre: "gengar",     imagen: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png",  tipos: ["ghost", "poison"] }
 ];
-
+*/
 const contenedor = document.getElementById("resultado");
 
 function crearTarjeta(pokemon) {
@@ -35,7 +35,10 @@ function render(lista) {
   });
 }
 
-render(pokemonLocal);   // ¡píntalo!
+//render(pokemonLocal);   // ¡píntalo!
+
+contenedor.innerHTML = `<p class="col-span-full text-center text-slate-500">Cargando…</p>`
+
 
 const buscador = document.getElementById("buscador");
 
@@ -44,3 +47,27 @@ buscador.addEventListener("input", function () {
   const filtrados = pokemonLocal.filter(p => p.nombre.includes(texto));
   render(filtrados);   // ← el MISMO render, con datos distintos
 });
+
+function adaptarPokemon(data) {
+  return {
+    nombre: data.name,
+    imagen: data.sprites?.front_default ?? "https://via.placeholder.com/96?text=?",
+    tipos:  data.types.map(t => t.type.name)   // [{type:{name:"electric"}}] → ["electric"]
+  };
+}
+const nombres = ["bulbasaur", "charmander", "squirtle", "pikachu", "jigglypuff", "gengar"];
+let pokedex = [];   // aquí guardamos la rejilla cargada
+
+// un fetch por cada nombre → un array de promesas
+const promesas = nombres.map(function (nombre) {
+  return fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`).then(r => r.json());
+});
+
+Promise.all(promesas)
+  .then(function (datos) {                 // datos = array con los 6 Pokémon crudos
+    pokedex = datos.map(adaptarPokemon);   // adapta todos a tu forma limpia
+    render(pokedex);
+  })
+  .catch(function () {
+    contenedor.innerHTML = `<p class="col-span-full text-center text-red-600">No se pudo cargar la Pokédex.</p>`;
+  });
