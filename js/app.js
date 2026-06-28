@@ -53,8 +53,7 @@ function adaptarPokemon(data) {
   };
 }
 const nombres = ["bulbasaur", "charmander", "squirtle", "pikachu", "jigglypuff", "gengar"];
-let pokedex = [];   // aquí guardamos la rejilla cargada
-
+let pokedex = [];   // aquí guarda
 // un fetch por  de promesas
 const promesas = nombres.map(function (nombre) {
   return fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`).then(r => r.json());
@@ -70,6 +69,6 @@ Promise.all(promesas)
   });
 
   //hhhhh
-  
+
 
   
