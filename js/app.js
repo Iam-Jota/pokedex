@@ -98,7 +98,7 @@ function capturar(pokemon) {
 }
 
 
-// muestra la tarjeta del Pokémon encontrado
+// muestra la tarjedo
 function mostrarResultado(pokemon) {
  contenedor.innerHTML = "";
  // contenedor.appendChild(crearTarjeta(pokemon));
