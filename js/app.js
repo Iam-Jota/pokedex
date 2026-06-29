@@ -101,7 +101,7 @@ function capturar(pokemon) {
 // muestra la tarjedo
 function mostrarResultado(pokemon) {
  contenedor.innerHTML = "";
- // contenedor.appendChild(crearTarjeta(pokemon));
+ // contenedor.appendChild(crearTapokemon));
 const tarjeta = crearTarjeta(pokemon);
 
 
