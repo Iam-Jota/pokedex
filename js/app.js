@@ -239,7 +239,7 @@ buscador.addEventListener("keydown", function (event) {
   
 
 
-let offset = 0;   // desde qué Pokémon empezamos
+let offset = 0;   // desempezamos
 
 async function cargarMas() {
   // ?limit (cuántos) y ?offset (desde dónde) = parámetros de consulta
