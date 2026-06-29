@@ -1,0 +1,54 @@
+.pokebola-esquina {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  z-index: 50;
+}body {
+  display: flex;
+  justify-content: center;
+  background-image: url('img/ash.webp');
+  background-size: cover;
+  background-position: left;
+  background-attachment: fixed;
+}
+
+.contenido-principal {
+  width: 70%;
+  padding: 1.5rem;
+  margin-left: 10%;
+}
+
+
+/* ===== Borde eléctrico para las tarjetas de Pokémon ===== */
+
+.bg-white.rounded-xl.shadow {
+  position: relative;
+  overflow: visible;
+}
+
+.electric-border {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  pointer-events: none;
+  z-index: 10;
+  filter:
+    drop-shadow(0 0 2px #facc15)
+    drop-shadow(0 0 6px #facc15)
+    drop-shadow(0 0 14px #fbbf24)
+    drop-shadow(0 0 24px rgba(251, 191, 36, 0.6));
+}
+
+.electric-border rect {
+  fill: none;
+  stroke: #facc15;
+  stroke-width: 2.5;
+  filter: url(#turbulencia);
+}
+
+#resultado {
+  overflow: visible;
+}

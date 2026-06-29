@@ -5,8 +5,45 @@
   { nombre: "squirtle",   imagen: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",  tipos: ["water"] },
   { 
 */
+
+const mensaje = document.getElementById("mensaje");
+const spinner = document.getElementById("spinner");
 const contenedor = document.getElementById("resultado");
 
+
+
+
+
+
+
+
+function crearTarjeta(pokemon) {
+    let {nombre, imagen, tipos}= pokemon
+  const articulo = document.createElement("article");
+  const badges = tipos
+  .map(function (tipo) {
+    return `<span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded-full">${tipo}</span>`;
+  })
+  .join("");
+  articulo.className = "bg-white rounded-xl shadow p-4 text-center";
+  articulo.innerHTML = `
+    <svg class="electric-border" preserveAspectRatio="none">
+      <rect x="1" y="1" width="99%" height="99%" rx="12" />
+    </svg>
+    <img src="${imagen}" alt="${nombre}" class="w-24 h-24 mx-auto">
+    <h2 class="capitalize font-bold text-slate-800 mt-2">${nombre}</h2>
+   <div class="flex gap-1 justify-center mt-2 flex-wrap">${badges}</div>
+    `;
+  return articulo;
+}
+
+
+
+
+
+
+
+/*
 function crearTarjeta(pokemon) {
     let {nombre, imagen, tipos}= pokemon
   const articulo = document.createElement("article");   // crea el nodo <article>
@@ -14,14 +51,42 @@ function crearTarjeta(pokemon) {
   .map(function (tipo) { return `<span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded-full">${tipo}</span>`;
   })
   .join("");   // une el array de stringso
+
+*/
+
+
+
+
+
+/*
+articulo.className = "bg-white rounded-xl shadow p-4 text-center";
+articulo.innerHTML = `
+  <svg class="electric-border" preserveAspectRatio="none">
+    <rect x="1" y="1" width="99%" height="99%" rx="12" />
+  </svg>
+  
+  <img src="${imagen}" alt="${nombre}" class="w-24 h-24 mx-auto">
+  <h2 class="capitalize font-bold text-slate-800 mt-2">${nombre}</h2>
+  <div class="flex gap-1 justify-center mt-2 flex-wrap">${badges}</div>
+  `;
+return articulo;
+
+
+
+
+
+
+
+  
   articulo.className = "bg-white rounded-xl shadow p-4 text-center";
   articulo.innerHTML = `
+  
     <img src="${imagen}" alt="${nombre}" class="w-24 h-24 mx-auto">
     <h2 class="capitalize font-bold text-slate-800 mt-2">${nombre}</h2>
    <div class="flex gap-1 justify-center mt-2 flex-wrap">${badges}</div>
     `;
   return articulo;
-}
+}*/
 
 function render(arrayPokemon) {
   contenedor.innerHTML = "";                 // 1. limpia lo anterior
@@ -44,7 +109,6 @@ function adaptarPokemon(data) {
     // data.stats = [{ base_stat: 35, stat: { name: "hp" } }, ...]
   };
 }
-  contenedor.innerHTML = `<p class="col-span-full text-center text-red-600">No se pudo cargar la Pokédex.</p>`;
   
 
 let pokedex = [];   // aquí
@@ -52,16 +116,29 @@ let pokedex = [];   // aquí
 
 async function obtenerPokemon(idONombre) {
   const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${idONombre}`);
+  console.log(response.status);
+  console.log(response.ok);
+
+  if (!response.ok) {                                    // 404, 500, etc.
+    throw new Error(`No se encontró "${idONombre}"`);    // lanza un error propio
+  }
+
   return response.json();
 }
-
 async function cargarPokedex() {
-  const nombres = ["bulbasaur", "charmander", "squirtle", "pikachu", "jigglypuff", "gengar"];
-  const datos = await Promise.all(nombres.map(obtenerPokemon));   // varios en paralelo, con await
-  pokedex = datos.map(adaptarPokemon);
-  render(pokedex);
+  spinner.classList.remove("hidden");
+  try {
+    const nombres = ["bulbasaur", "charmander", "squirtle", "pikachu", "jigglypuff", "gengar"];
+    const datos = await Promise.all(nombres.map(obtenerPokemon));
+    pokedex = datos.map(adaptarPokemon);
+    render(pokedex);
+  } catch (error) {
+    mensaje.textContent = "No se pudo cargar la Pokédex.";
+    mensaje.classList.remove("hidden");
+  } finally {
+    spinner.classList.add("hidden");
+  }
 }
-
 cargarPokedex();
 
 
@@ -124,10 +201,31 @@ const tarjeta = crearTarjeta(pokemon);
 }
 
 
+
+
+async function mostrarBusqueda(nombre) {
+  mensaje.classList.add("hidden");   // limpia errores anteriores
+spinner.classList.remove("hidden");
+  try {
+    const pokemon = await buscarPokemon(nombre);
+    mostrarResultado(pokemon); 
+    spinner.classList.add("hidden");
+      // muestra la tarjeta con el botón Capturar (de C11)
+  } catch (error) {
+    mensaje.classList.remove("hidden");
+    mensaje.textContent = error.message;
+     } finally {
+    spinner.classList.add("hidden");      // ✅ oculta carga SIEMPRE
+  
+   
+  }
+}
+
+/*
 async function mostrarBusqueda(nombre) {
   const pokemon = await buscarPokemon(nombre);
   mostrarResultado(pokemon);
-}
+}*/
 
 boton.addEventListener("click", function () {
   const nombre = buscador.value.trim();
